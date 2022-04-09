@@ -2,6 +2,7 @@ var apiKey = "4" + "8" + "0" + "6" + "b" + "8" + "0" + "a" + "8" + "7" + "d" + "
 var weatherEl = document.querySelector("#weather-container");
 var formEl = document.querySelector("form");
 var homeInputEl = document.querySelector("#home");
+var destinationInputEl = document.querySelector("#destination");
 //var searchHistory = [];
 //var searchHistoryEl = document.querySelector("#search-history");
 
@@ -11,14 +12,33 @@ var formSubmitHandler = function(event) {
     weatherEl.innerHTML = "";
 
     var home = homeInputEl.value.trim();
+    var destination = destinationInputEl.value.trim();
 
-    //var saveHome = true;
+    if(!home || !destination) {
+        if(!home && destination) {
+            weatherEl.innerHTML = "<h3 class='alert'>Please enter your starting location</h3>";
+        } else if(home && !destination) {
+            weatherEl.innerHTML = "<h3 class='alert'>Please enter your destination</h3>";
+        } else {
+            weatherEl.innerHTML = "<h3 class='alert'>Please enter your starting location and destination</h3>";
+        }
+    } else if(home === destination) {
+        weatherEl.innerHTML = "<h3 class='alert'>Please enter different values for your starting location and destination</h3>";
+    } else {
+        getLocation(destination);
+        destinationInputEl.value = "";
+        
+        getLocation(home);
+        homeInputEl.value = "";
+    }
+
+    /*var saveHome = true;
 
     if(home) {
         getLocation(home);
         homeInputEl.value = "";
 
-        /*for(var i = 0; i < searchHistory.length; i++){
+        for(var i = 0; i < searchHistory.length; i++){
             if(home === searchHistory[i]) {
                 saveHome = false;
             }
@@ -38,10 +58,10 @@ var formSubmitHandler = function(event) {
 
         localStorage.setItem("home-history", JSON.stringify(searchHistory));
 
-        displaySearchHistory();*/
+        displaySearchHistory();
     } else {
         weatherEl.innerHTML = "<h3 class='alert'>Please enter a city</h3>";
-    }
+    }*/
 };
 
 /*var searchButtonHandler = function(event) {
