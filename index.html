@@ -1,12 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TravelFog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  </head>
+  <body>
+<!-- Navbar Start -->
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="$navbar-item-img-max-height" href="#top">
+            <img src="Assets/images/TravelFog.png" width="100">
+          </a>
+      
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div id="navbarBasicExample" class="navbar-menu">
+          <div class="navbar-start">
+            <a class="navbar-item">
+              Home
+            </a>
+            <a class="navbar-item">
+              Directions
+            </a>
+            <a class="navbar-item">
+              Weather
+            </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+<!-- Navbar End-->
+
+<!-- Placeholder stuff-->
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        TravelFog
+      </h1>
+
+<!-- Input Form -->
+      <form class="box">
+        <div class="field">
+          <label class="label">Your Location</label>
+          <div class="control">
+            <input class="input" type="address" placeholder="1234 Example ln, New York, NY 01234">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Destination Address</label>
+          <div class="control">
+            <input class="input" type="address" placeholder="5678 Example ln, New York, NY 01234">
+          </div>
+        </div>
+        <button class="button is-danger is-rounded">Get Weather And Directions</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Weather Box -->
+  <div class="columns">
+    <div class="column box has-background-light">
+      Weather
+    </div>
+<!-- Map- Box -->
+    <div class="column box has-background-light">
+      Directions
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong>TravelFog</strong> by <a href="https://auzzie1790.github.io/Austin-Leaman-Portfolio/">Austin Leaman, </a><a href="https://acattet.github.io/-2.-Advanced-CSS-Professional-Portfolio/">Anthony Cattet, </a><a href="https://jec6789.github.io/portfolio/">Jonathan Cushing</a>. 
+      </p>
+    </div>
+  </footer>
+
+  </body>
 </html>
