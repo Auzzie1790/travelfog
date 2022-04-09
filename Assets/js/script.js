@@ -1,31 +1,31 @@
 var apiKey = "4" + "8" + "0" + "6" + "b" + "8" + "0" + "a" + "8" + "7" + "d" + "4" + "d" + "5" + "f" + "0" + "3" + "2" + "1" + "3" + "f" + "3" + "9" + "8" + "1" + "b" + "4" + "7" + "9" + "9" + "a" + "d";
-var articleEl = document.querySelector("article");
-var cityFormEl = document.querySelector("#city-form");
-var cityInputEl = document.querySelector("#city");
-var searchHistory = [];
-var searchHistoryEl = document.querySelector("#search-history");
+var weatherEl = document.querySelector("#weather-container");
+var formEl = document.querySelector("form");
+var homeInputEl = document.querySelector("#home");
+//var searchHistory = [];
+//var searchHistoryEl = document.querySelector("#search-history");
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
 
-    articleEl.innerHTML = "";
+    weatherEl.innerHTML = "";
 
-    var city = cityInputEl.value.trim();
+    var home = homeInputEl.value.trim();
 
-    var saveCity = true;
+    //var saveHome = true;
 
-    if(city) {
-        getLocation(city);
-        cityInputEl.value = "";
+    if(home) {
+        getLocation(home);
+        homeInputEl.value = "";
 
-        for(var i = 0; i < searchHistory.length; i++){
-            if(city === searchHistory[i]) {
-                saveCity = false;
+        /*for(var i = 0; i < searchHistory.length; i++){
+            if(home === searchHistory[i]) {
+                saveHome = false;
             }
         }
 
-        if(saveCity === true) {
-            searchHistory.push(city);
+        if(saveHome === true) {
+            searchHistory.push(home);
         }
 
         if(searchHistory.length === 9) {
@@ -36,29 +36,29 @@ var formSubmitHandler = function(event) {
             searchHistory.splice(-1);
         }
 
-        localStorage.setItem("city-history", JSON.stringify(searchHistory));
+        localStorage.setItem("home-history", JSON.stringify(searchHistory));
 
-        displaySearchHistory();
+        displaySearchHistory();*/
     } else {
-        articleEl.innerHTML = "<h3 class='alert'>Please enter a city</h3>";
+        weatherEl.innerHTML = "<h3 class='alert'>Please enter a city</h3>";
     }
 };
 
-var searchButtonHandler = function(event) {
+/*var searchButtonHandler = function(event) {
     var targetEl = event.target;
 
     if(targetEl.matches("button")) {
-        articleEl.innerHTML = "";
+        weatherEl.innerHTML = "";
 
-        var city = targetEl.textContent;
+        var home = targetEl.textContent;
 
-        if(city) {
-            getLocation(city);
+        if(home) {
+            getLocation(home);
         } else {
-            articleEl.innerHTML = "<h3 class='alert'>If you see this text, you've just encountered a bug that may need to be fixed. <a href='https://github.com/JEC6789/weather-dashboard/issues' target='_blank'>Please report this issue on GitHub</a> so I can look into it further.";
+            weatherEl.innerHTML = "<h3 class='alert'>If you see this text, you've just encountered a bug that may need to be fixed. <a href='https://github.com/JEC6789/weather-dashboard/issues' target='_blank'>Please report this issue on GitHub</a> so I can look into it further.";
         }
     }
-};
+};*/
 
 var getLocation = function(city) {
     var geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + apiKey;
@@ -69,7 +69,7 @@ var getLocation = function(city) {
                 getWeatherData(geoData);
             });
         } else {
-            articleEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
+            weatherEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
         }
     });
 };
@@ -83,7 +83,7 @@ var getWeatherData = function(geoData) {
                 displayWeatherData(geoData, weatherData);
             });
         } else {
-            articleEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
+            weatherEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
         }
     });
 };
@@ -135,11 +135,11 @@ var displayWeatherData = function(geoData, weatherData) {
     UVColorEl.textContent = weatherData.current.uvi;
     currentUVEl.appendChild(UVColorEl);
     currentWeatherEl.appendChild(currentUVEl);
-    articleEl.appendChild(currentWeatherEl);
+    weatherEl.appendChild(currentWeatherEl);
 
     var forecastHeaderEl = document.createElement("h3");
     forecastHeaderEl.textContent = "5-Day Forecast:";
-    articleEl.appendChild(forecastHeaderEl);
+    weatherEl.appendChild(forecastHeaderEl);
 
     var forecastContainerEl = document.createElement("section");
     forecastContainerEl.className = "forecast-container";
@@ -174,11 +174,11 @@ var displayWeatherData = function(geoData, weatherData) {
         forecastContainerEl.appendChild(forecastCardEl);
     }
 
-    articleEl.appendChild(forecastContainerEl);
+    weatherEl.appendChild(forecastContainerEl);
 };
 
-var loadSearchHistory = function() {
-    var savedHistory = localStorage.getItem("city-history");
+/*var loadSearchHistory = function() {
+    var savedHistory = localStorage.getItem("home-history");
     if(!savedHistory) {
         return false;
     }
@@ -196,8 +196,8 @@ var displaySearchHistory = function() {
         historyItemEl.textContent = searchHistory[i];
         searchHistoryEl.appendChild(historyItemEl);
     }
-};
+};*/
 
-searchHistoryEl.addEventListener("click", searchButtonHandler);
-cityFormEl.addEventListener("submit", formSubmitHandler);
-loadSearchHistory();
+//searchHistoryEl.addEventListener("click", searchButtonHandler);
+formEl.addEventListener("submit", formSubmitHandler);
+//loadSearchHistory();
