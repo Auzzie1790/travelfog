@@ -3,35 +3,35 @@ var weatherSectionEl = document.querySelector("#weather-container");
 var formEl = document.querySelector("form");
 var homeInputEl = document.querySelector("#home");
 var destinationInputEl = document.querySelector("#destination");
-var warningEl = document.querySelector("#warning");
 //var searchHistory = [];
 //var searchHistoryEl = document.querySelector("#search-history");
+var lat = 0;
+var lng = 0;
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
 
-    warningEl.innerHTML = "";
     weatherSectionEl.innerHTML = "";
 
-    var home = homeInputEl.value.trim();
+   // var home = homeInputEl.value.trim();
     var destination = destinationInputEl.value.trim();
 
     if(!home || !destination) {
         if(!home && destination) {
-            warningEl.innerHTML = "<p>Please enter your starting location</p>";
+            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your starting location</h3>";
         } else if(home && !destination) {
-            warningEl.innerHTML = "<p>Please enter your destination</p>";
+            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your destination</h3>";
         } else {
-            warningEl.innerHTML = "<p>Please enter your starting location and destination</p>";
+            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your starting location and destination</h3>";
         }
     } else if(home === destination) {
-        warningEl.innerHTML = "<p>Please enter different values for your starting location and destination</p>";
+        weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter different values for your starting location and destination</h3>";
     } else {
-        getLocation(home);
+      getLocation(home);
         homeInputEl.value = "";
 
-        getLocation(destination);
-        destinationInputEl.value = "";
+     getLocation(destination);
+       destinationInputEl.value = "";
     }
 
     /*var saveHome = true;
@@ -87,18 +87,17 @@ var getLocation = function(city) {
 
     fetch(geoApiUrl).then(function(response) {
         if(response.ok) {
+            
             response.json().then(function(geoData) {
-                console.log(geoData);
-                if(geoData.length === 0) {
-                    var noResultWarning = document.createElement("p");
-                    noResultWarning.textContent = 'No results returned for "' + city + '"';
-                    warningEl.appendChild(noResultWarning);
-                } else {
-                    getWeatherData(geoData);
-                }
+                console.log(geoData[0].lat)
+                lat = geoData[0].lat
+               
+                lng = geoData[0].lon
+                getWeatherData(geoData);
+                initialize();
             });
         } else {
-            warningEl.innerHTML = "<p>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</p>";
+            weatherSectionEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
         }
     });
 };
@@ -113,7 +112,7 @@ var getWeatherData = function(geoData) {
                 displayWeatherData(geoData, weatherData);
             });
         } else {
-            warningEl.innerHTML = "<p>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</p>";
+            weatherSectionEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
         }
     });
 };
@@ -123,7 +122,7 @@ var displayWeatherData = function(geoData, weatherData) {
 
     
     var weatherDataEl = document.createElement("div")
-    weatherDataEl.className = "card ml-3";
+    weatherDataEl.className = "card";
     var currentWeatherEl = document.createElement("div");
     currentWeatherEl.className = "card-content pb-3";
     var currentHeaderEl = document.createElement("div");
@@ -239,8 +238,9 @@ var displaySearchHistory = function() {
 
 //begin pano map
 
+
 function initialize() {
-    var place = { lat: 42.345573, lng: -71.097326 };
+    var place = { lat , lng }
     const map = new google.maps.Map(document.getElementById("map"), {
       center: place,
       zoom: 14,
@@ -257,7 +257,10 @@ function initialize() {
     );
   
     map.setStreetView(panorama);
-}
+  }
+
+  
+
   
 //searchHistoryEl.addEventListener("click", searchButtonHandler);
 formEl.addEventListener("submit", formSubmitHandler);
