@@ -13,7 +13,7 @@
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a class="$navbar-item-img-max-height" href="#top">
-            <img src="Assets/images/TravelFog.png" width="100">
+            <img src="assets/images/TravelFog.png" width="100">
           </a>
       
           <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -59,8 +59,6 @@
             <input id="home" class="input" type="address" placeholder="1234 Example ln, New York, NY 01234">
           </div>
         </div>
-      
-
      
         <div class="field">
           <label class="label">Destination Address</label>
@@ -68,14 +66,13 @@
             <input id="destination" class="input" type="address" placeholder="5678 Example ln, New York, NY 01234">
           </div>
         </div>
-      
-      </div>
         <button class="button is-danger is-rounded">Get Weather And Directions</button>
+        <div id="warning"></div>
       </form>
     </div>
   </section>
 
- <!-- Weather Box -->
+<!-- Weather Box -->
  <div class="columns">
   <div class="column box has-background-light">
     <h1 class="title has-text-centered">Weather</h1>
@@ -87,12 +84,11 @@
    
    <div id="map"></div>
    <div id="pano"></div>
-  
-   
+
    <script
-     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwDPSLFOS9-KXQMrsqTlTd8GU9tbtF2w8&callback=initMap&libraries=places&callback=initialize&v=weekly"
-     async
-   ></script> 
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwDPSLFOS9-KXQMrsqTlTd8GU9tbtF2w8&callback=initMap&libraries=places&callback=initialize&v=weekly"
+      async
+    ></script>
    
     </div>
   </div>
@@ -107,9 +103,7 @@
   </footer>
 
   <style>
-  #map,
-  #pano {
-  
+  #map, #pano {
   height: 400px;
   width: 100%;
 }
