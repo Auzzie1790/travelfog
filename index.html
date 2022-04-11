@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TravelFog</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   </head>
   <body>
@@ -50,36 +52,51 @@
 
 <!-- Input Form -->
       <form class="box has-background-light">
+        
         <div class="field">
-          <label class="label">Your Location</label>
+         <label class="label">Your Location</label>
           <div class="control">
             <input id="home" class="input" type="address" placeholder="1234 Example ln, New York, NY 01234">
           </div>
         </div>
+      
+
+     
         <div class="field">
           <label class="label">Destination Address</label>
           <div class="control">
             <input id="destination" class="input" type="address" placeholder="5678 Example ln, New York, NY 01234">
           </div>
         </div>
+      
+      </div>
         <button class="button is-danger is-rounded">Get Weather And Directions</button>
       </form>
     </div>
   </section>
 
-  <!-- Weather Box -->
-  <div class="columns">
-    <div class="column box has-background-light">
-      <h1 class="title has-text-centered">Weather</h1>
-      <div id="weather-container">
-
-      </div>
-    </div>
+ <!-- Weather Box -->
+ <div class="columns">
+  <div class="column box has-background-light">
+    <h1 class="title has-text-centered">Weather</h1>
+    <div id="weather-container"></div>
+  </div>
 <!-- Map- Box -->
-    <div class="column box has-background-light">
-     <h1 class="title has-text-centered">Directions</h1>
+  <div class="column box has-background-light">
+   <h1 class="title has-text-centered">Directions</h1>
+   
+   <div id="map"></div>
+   <div id="pano"></div>
+  
+   
+   <script
+     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwDPSLFOS9-KXQMrsqTlTd8GU9tbtF2w8&callback=initMap&libraries=places&callback=initialize&v=weekly"
+     async
+   ></script> 
+   
     </div>
   </div>
+</div>
 
   <footer class="footer">
     <div class="content has-text-centered">
@@ -89,6 +106,15 @@
     </div>
   </footer>
 
-  <script src="./Assets/js/script.js"></script>
+  <style>
+  #map,
+  #pano {
+  
+  height: 400px;
+  width: 100%;
+}
+  </style>
+
+  <script src="./assets/js/script.js"></script>
   </body>
 </html>
