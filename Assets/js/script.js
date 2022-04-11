@@ -11,7 +11,7 @@ var formSubmitHandler = function(event) {
 
     weatherSectionEl.innerHTML = "";
 
-    var home = homeInputEl.value.trim();
+   // var home = homeInputEl.value.trim();
     var destination = destinationInputEl.value.trim();
 
     if(!home || !destination) {
@@ -25,11 +25,11 @@ var formSubmitHandler = function(event) {
     } else if(home === destination) {
         weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter different values for your starting location and destination</h3>";
     } else {
-        getLocation(home);
+      getLocation(home);
         homeInputEl.value = "";
 
-        getLocation(destination);
-        destinationInputEl.value = "";
+     getLocation(destination);
+       destinationInputEl.value = "";
     }
 
     /*var saveHome = true;
@@ -112,6 +112,7 @@ var getWeatherData = function(geoData) {
 var displayWeatherData = function(geoData, weatherData) {
     var currentDate = new Date();
 
+    
     var weatherDataEl = document.createElement("div")
     weatherDataEl.className = "card";
     var currentWeatherEl = document.createElement("div");
@@ -170,6 +171,7 @@ var displayWeatherData = function(geoData, weatherData) {
     forecastHeaderEl.textContent = "5-Day Forecast:";
     futureWeatherEl.appendChild(forecastHeaderEl);
 
+
     for(var i = 0; i < 5; i++) {
         var forecastSubheaderEl = document.createElement("div");
         forecastSubheaderEl.className = "media is-align-items-center";
@@ -226,6 +228,32 @@ var displaySearchHistory = function() {
     }
 };*/
 
+//begin pano map
+
+
+function initialize() {
+    var place = { lat: 42.345573, lng: -71.097326 };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: place,
+      zoom: 14,
+    });
+    const panorama = new google.maps.StreetViewPanorama(
+      document.getElementById("pano"),
+      {
+        position: place,
+        pov: {
+          heading: 34,
+          pitch: 10,
+        },
+      }
+    );
+  
+    map.setStreetView(panorama);
+  }
+
+  
+
+  
 //searchHistoryEl.addEventListener("click", searchButtonHandler);
 formEl.addEventListener("submit", formSubmitHandler);
 //loadSearchHistory();
