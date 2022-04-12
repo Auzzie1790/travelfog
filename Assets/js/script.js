@@ -3,35 +3,37 @@ var weatherSectionEl = document.querySelector("#weather-container");
 var formEl = document.querySelector("form");
 var homeInputEl = document.querySelector("#home");
 var destinationInputEl = document.querySelector("#destination");
+var warningEl = document.querySelector("#warning");
 //var searchHistory = [];
 //var searchHistoryEl = document.querySelector("#search-history");
-var lat = 0;
-var lng = 0;
+var lat = 38.8950368;
+var lng = -77.0365427;
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
 
-    weatherSectionEl.innerHTML = "";
+    warningEl.innerHTML = "";
 
-   // var home = homeInputEl.value.trim();
+    var home = homeInputEl.value.trim();
     var destination = destinationInputEl.value.trim();
 
     if(!home || !destination) {
         if(!home && destination) {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your starting location</h3>";
+            warningEl.innerHTML = "<p>Please enter your starting location</p>";
         } else if(home && !destination) {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your destination</h3>";
+            warningEl.innerHTML = "<p>Please enter your destination</p>";
         } else {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter your starting location and destination</h3>";
+            warningEl.innerHTML = "<p>Please enter your starting location and destination</p>";
         }
     } else if(home === destination) {
-        weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter different values for your starting location and destination</h3>";
+        warningEl.innerHTML = "<p>Please enter different values for your starting location and destination</p>";
     } else {
-      getLocation(home);
+        weatherSectionEl.innerHTML = "";
+        getLocation(home, false);
         homeInputEl.value = "";
 
-     getLocation(destination);
-       destinationInputEl.value = "";
+        getLocation(destination, true);
+        destinationInputEl.value = "";
     }
 
     /*var saveHome = true;
@@ -62,7 +64,7 @@ var formSubmitHandler = function(event) {
 
         displaySearchHistory();
     } else {
-        weatherSectionEl.innerHTML = "<h3 class='alert'>Please enter a city</h3>";
+        warningEl.innerHTML = "<p>Please enter a city</p>";
     }*/
 };
 
@@ -77,27 +79,32 @@ var formSubmitHandler = function(event) {
         if(home) {
             getLocation(home);
         } else {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>If you see this text, you've just encountered a bug that may need to be fixed. <a href='https://github.com/JEC6789/weather-dashboard/issues' target='_blank'>Please report this issue on GitHub</a> so I can look into it further.";
+            warningEl.innerHTML = "<p>If you see this text, you've just encountered a bug that may need to be fixed. <a href='https://github.com/JEC6789/weather-dashboard/issues' target='_blank'>Please report this issue on GitHub</a> so I can look into it further.</p>";
         }
     }
 };*/
 
-var getLocation = function(city) {
+var getLocation = function(city, destination) {
     var geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + JECApiKey;
 
     fetch(geoApiUrl).then(function(response) {
         if(response.ok) {
-            
             response.json().then(function(geoData) {
-                console.log(geoData[0].lat)
-                lat = geoData[0].lat
-               
-                lng = geoData[0].lon
-                getWeatherData(geoData);
-                initialize();
+                if(geoData.length === 0) {
+                    var noResultWarning = document.createElement("p");
+                    noResultWarning.textContent = 'No results found for "' + city + '"';
+                    warningEl.appendChild(noResultWarning);
+                } else {
+                    getWeatherData(geoData);
+                    if(destination === true) {
+                        lat = geoData[0].lat;
+                        lng = geoData[0].lon;
+                        initialize();
+                    }
+                }
             });
         } else {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
+            warningEl.innerHTML = "<p>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</p>";
         }
     });
 };
@@ -108,23 +115,21 @@ var getWeatherData = function(geoData) {
     fetch(oneCallApiUrl).then(function(response) {
         if(response.ok) {
             response.json().then(function(weatherData) {
-                console.log(weatherData);
                 displayWeatherData(geoData, weatherData);
             });
         } else {
-            weatherSectionEl.innerHTML = "<h3 class='alert'>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</h3>";
+            warningEl.innerHTML = "<p>Somebody just got diagnosed with skill issue. Could be you, could be me, could be the API I'm getting the data you requested from. It doesn't matter who has skill issue in the end though, as it is a disease that stops everything in its tracks. Maybe try submitting that city again and see if it changes anything.</p>";
         }
     });
 };
 
 var displayWeatherData = function(geoData, weatherData) {
     var currentDate = new Date();
-
     
     var weatherDataEl = document.createElement("div")
-    weatherDataEl.className = "card";
+    weatherDataEl.className = "card ml-3";
     var currentWeatherEl = document.createElement("div");
-    currentWeatherEl.className = "card-content pb-3";
+    currentWeatherEl.className = "card-content pt-4 pb-3";
     var currentHeaderEl = document.createElement("div");
     currentHeaderEl.className = "media mb-3 is-align-items-center";
 
@@ -153,22 +158,7 @@ var displayWeatherData = function(geoData, weatherData) {
     currentWeatherEl.appendChild(currentHumidityEl);
 
     var currentUVEl = document.createElement("p");
-    currentUVEl.textContent = "UV Index: ";
-
-    var UVColorEl = document.createElement("span");
-    if(weatherData.current.uvi < 3) {
-        UVColorEl.className = "low";
-    } else if(weatherData.current.uvi < 6) {
-        UVColorEl.className = "moderate";
-    } else if(weatherData.current.uvi < 8) {
-        UVColorEl.className = "high";
-    } else if(weatherData.current.uvi <= 10) {
-        UVColorEl.className = "very-high";
-    } else {
-        UVColorEl.className = "extreme";
-    }
-    UVColorEl.textContent = weatherData.current.uvi;
-    currentUVEl.appendChild(UVColorEl);
+    currentUVEl.textContent = "UV Index: " + weatherData.current.uvi;
     currentWeatherEl.appendChild(currentUVEl);
     weatherDataEl.appendChild(currentWeatherEl);
 
@@ -179,8 +169,12 @@ var displayWeatherData = function(geoData, weatherData) {
     forecastHeaderEl.textContent = "5-Day Forecast:";
     futureWeatherEl.appendChild(forecastHeaderEl);
 
+    var forecastContainerEl = document.createElement("div");
+    forecastContainerEl.className = "is-flex is-flex-wrap-wrap is-justify-content-space-around";
 
     for(var i = 0; i < 5; i++) {
+        var forecastDayEl = document.createElement("div");
+
         var forecastSubheaderEl = document.createElement("div");
         forecastSubheaderEl.className = "media is-align-items-center";
 
@@ -195,22 +189,24 @@ var displayWeatherData = function(geoData, weatherData) {
         var forecastDateEl = document.createElement("h4");
         forecastDateEl.textContent = String(forecastDate.getMonth() + 1).padStart(2, '0') + "/" + String(forecastDate.getDate()).padStart(2, '0') + "/" + forecastDate.getFullYear();
         forecastSubheaderEl.appendChild(forecastDateEl);
-        futureWeatherEl.appendChild(forecastSubheaderEl);
+        forecastDayEl.appendChild(forecastSubheaderEl);
 
         var forecastTempEl = document.createElement("p");
         forecastTempEl.textContent = "Temp: " + weatherData.daily[i].temp.max + " °F";
-        futureWeatherEl.appendChild(forecastTempEl);
+        forecastDayEl.appendChild(forecastTempEl);
 
         var forecastWindEl = document.createElement("p");
         forecastWindEl.textContent = "Wind: " + weatherData.daily[i].wind_speed + " MPH";
-        futureWeatherEl.appendChild(forecastWindEl);
+        forecastDayEl.appendChild(forecastWindEl);
 
         var forecastHumidityEl = document.createElement("p");
         forecastHumidityEl.className = "mb-4";
         forecastHumidityEl.textContent = "Humidity: " + weatherData.daily[i].humidity + " %";
-        futureWeatherEl.appendChild(forecastHumidityEl);
+        forecastDayEl.appendChild(forecastHumidityEl);
+        forecastContainerEl.appendChild(forecastDayEl);
     }
 
+    futureWeatherEl.appendChild(forecastContainerEl);
     weatherDataEl.appendChild(futureWeatherEl);
     weatherSectionEl.appendChild(weatherDataEl);
 };
@@ -238,7 +234,6 @@ var displaySearchHistory = function() {
 
 //begin pano map
 
-
 function initialize() {
     var place = { lat , lng }
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -257,10 +252,7 @@ function initialize() {
     );
   
     map.setStreetView(panorama);
-  }
-
-  
-
+}
   
 //searchHistoryEl.addEventListener("click", searchButtonHandler);
 formEl.addEventListener("submit", formSubmitHandler);
