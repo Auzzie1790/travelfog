@@ -29,7 +29,7 @@
               Home
             </a>
             <a class="navbar-item">
-              Directions
+              Map
             </a>
             <a class="navbar-item">
               Weather
@@ -47,26 +47,26 @@
         TravelFog
       </h1>
       <p class="has-text-centered is-size-5">
-         Get the weather and directions to the destination of your choice at the click of a button!
+         Get the weather and map information for the city of your choice at the click of a button!
       </p>
 
 <!-- Input Form -->
       <form class="box has-background-light">
         
         <div class="field">
-         <label class="label">Your Location</label>
+         <label class="label">Your City</label>
           <div class="control">
-            <input id="home" class="input" type="address" placeholder="1234 Example ln, New York, NY 01234">
+            <input id="home" class="input" type="address" placeholder="e.g. Indianapolis">
           </div>
         </div>
      
         <div class="field">
-          <label class="label">Destination Address</label>
+          <label class="label">Destination City</label>
           <div class="control">
-            <input id="destination" class="input" type="address" placeholder="5678 Example ln, New York, NY 01234">
+            <input id="destination" class="input" type="address" placeholder="e.g. Detroit">
           </div>
         </div>
-        <button class="button is-danger is-rounded">Get Weather And Directions</button>
+        <button class="button is-danger is-rounded">Get Weather And Map</button>
         <div id="warning"></div>
       </form>
     </div>
@@ -80,7 +80,7 @@
   </div>
 <!-- Map- Box -->
   <div class="column box has-background-light">
-   <h1 class="title has-text-centered">Directions</h1>
+   <h1 class="title has-text-centered">Map</h1>
    
    <div id="map"></div>
    <div id="pano"></div>
