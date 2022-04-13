@@ -4,10 +4,16 @@ var formEl = document.querySelector("form");
 var homeInputEl = document.querySelector("#home");
 var destinationInputEl = document.querySelector("#destination");
 var warningEl = document.querySelector("#warning");
-//var searchHistory = [];
-//var searchHistoryEl = document.querySelector("#search-history");
 var lat = 38.8950368;
 var lng = -77.0365427;
+var getLocalStorage = function() {
+    var home = localStorage.getItem('home')
+    var destination = localStorage.getItem('destination')
+    if (home&&destination){
+        getLocation(home, false);
+        getLocation(destination, true);
+    }
+}
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -28,65 +34,36 @@ var formSubmitHandler = function(event) {
     } else if(home === destination) {
         warningEl.innerHTML = "<p>Please enter different values for your starting location and destination</p>";
     } else {
+        localStorage.setItem('home', home);
         weatherSectionEl.innerHTML = "";
         getLocation(home, false);
         homeInputEl.value = "";
-
+        localStorage.setItem('destination', destination)
         getLocation(destination, true);
         destinationInputEl.value = "";
     }
-
-    /*var saveHome = true;
-
-    if(home) {
-        getLocation(home);
-        homeInputEl.value = "";
-
-        for(var i = 0; i < searchHistory.length; i++){
-            if(home === searchHistory[i]) {
-                saveHome = false;
-            }
-        }
-
-        if(saveHome === true) {
-            searchHistory.push(home);
-        }
-
-        if(searchHistory.length === 9) {
-            for(var i = 0; i < 8; i++) {
-                searchHistory[i] = searchHistory[i + 1];
-            }
-
-            searchHistory.splice(-1);
-        }
-
-        localStorage.setItem("home-history", JSON.stringify(searchHistory));
-
-        displaySearchHistory();
-    } else {
-        warningEl.innerHTML = "<p>Please enter a city</p>";
-    }*/
 };
 
-/*var searchButtonHandler = function(event) {
-    var targetEl = event.target;
-
-    if(targetEl.matches("button")) {
-        weatherSectionEl.innerHTML = "";
-
-        var home = targetEl.textContent;
-
-        if(home) {
-            getLocation(home);
-        } else {
-            warningEl.innerHTML = "<p>If you see this text, you've just encountered a bug that may need to be fixed. <a href='https://github.com/JEC6789/weather-dashboard/issues' target='_blank'>Please report this issue on GitHub</a> so I can look into it further.</p>";
-        }
-    }
-};*/
 
 var getLocation = function(city, destination) {
-    var geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + JECApiKey;
+    var arr = city.split(' ');
+    console.log(arr);
+    var geoApiUrl = ""
+    if(arr.length>1){
+        if(arr[arr.length-1].length===2){
+            var cityName = arr.slice(0,arr.length-1).join(' ' )
+             geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "," + arr[arr.length-1] + ",US" + "&limit=1&appid=" + JECApiKey;
+        }
+        else{
+            geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + JECApiKey;
+        }
+        
+    }
 
+    else{
+        geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + JECApiKey
+    }
+console.log(geoApiUrl)
     fetch(geoApiUrl).then(function(response) {
         if(response.ok) {
             response.json().then(function(geoData) {
@@ -211,27 +188,6 @@ var displayWeatherData = function(geoData, weatherData) {
     weatherSectionEl.appendChild(weatherDataEl);
 };
 
-/*var loadSearchHistory = function() {
-    var savedHistory = localStorage.getItem("home-history");
-    if(!savedHistory) {
-        return false;
-    }
-
-    searchHistory = JSON.parse(savedHistory);
-
-    displaySearchHistory();
-};
-
-var displaySearchHistory = function() {
-    searchHistoryEl.innerHTML = "";
-
-    for(var i = searchHistory.length - 1; i >= 0; i--) {
-        var historyItemEl = document.createElement("button");
-        historyItemEl.textContent = searchHistory[i];
-        searchHistoryEl.appendChild(historyItemEl);
-    }
-};*/
-
 //begin pano map
 
 function initialize() {
@@ -253,7 +209,5 @@ function initialize() {
   
     map.setStreetView(panorama);
 }
-  
-//searchHistoryEl.addEventListener("click", searchButtonHandler);
+getLocalStorage()
 formEl.addEventListener("submit", formSubmitHandler);
-//loadSearchHistory();
