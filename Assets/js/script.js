@@ -15,6 +15,7 @@ var getLocalStorage = function() {
     }
 }
 
+// Form Handler
 var formSubmitHandler = function(event) {
     event.preventDefault();
 
@@ -44,7 +45,7 @@ var formSubmitHandler = function(event) {
     }
 };
 
-
+// Get city information
 var getLocation = function(city, destination) {
     var arr = city.split(' ');
     console.log(arr);
@@ -86,6 +87,7 @@ console.log(geoApiUrl)
     });
 };
 
+//Get weather Information
 var getWeatherData = function(geoData) {
     var oneCallApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + geoData[0].lat + "&lon=" + geoData[0].lon + "&units=imperial&appid=" + JECApiKey;
 
@@ -100,6 +102,7 @@ var getWeatherData = function(geoData) {
     });
 };
 
+//Display weather information
 var displayWeatherData = function(geoData, weatherData) {
     var currentDate = new Date();
     
@@ -188,7 +191,7 @@ var displayWeatherData = function(geoData, weatherData) {
     weatherSectionEl.appendChild(weatherDataEl);
 };
 
-//begin pano map
+// Map information
 
 function initialize() {
     var place = { lat , lng }
